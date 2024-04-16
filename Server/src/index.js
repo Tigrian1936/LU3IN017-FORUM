@@ -33,7 +33,7 @@ app.use('/threads', async (req, res)=>{
   }
 });
 
-app.use('/', async (req, res)=>{
+app.post('/Authentification', async (req, res)=>{
   const dburl = "mongodb+srv://victorlocherer:blQqG6A9ZpIX4p3Q@clusterprojet.etclz03.mongodb.net/"
 
   const client = new MongoClient(dburl);
@@ -59,6 +59,7 @@ app.use('/', async (req, res)=>{
   finally{
     client.close();
   }
+  next();
 });
 
 

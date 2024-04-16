@@ -8,6 +8,7 @@ class Threads {
         const query = {original_poster_id : original_poster_id, title : title, is_admin : is_admin}
         const options = {projection: {_id : 1}};
         const data = await this.db.collection('Threads').findOne(query, options);
+        console.log(data);
         return new Promise((resolve, reject) => {
             if(data != null){
                 reject();

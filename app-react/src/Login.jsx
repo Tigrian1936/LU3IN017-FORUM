@@ -11,7 +11,7 @@ function Login (props) {
 
 
     const handleSubmit = () => {
-        axios.post(GetUrl, {
+        axios.post(`${GetUrl()}`, {
             login: login, 
             password: password
         })

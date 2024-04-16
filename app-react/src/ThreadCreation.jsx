@@ -1,5 +1,5 @@
 import React from 'react';
-import GetUrl from './TEMP';
+import GetUrl from './Url';
 import axios from 'axios';
 function ThreadCreation(props){
   const createThread = ()=> {
