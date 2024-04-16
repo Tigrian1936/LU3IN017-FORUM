@@ -9,7 +9,7 @@ function ThreadCreation(props){
             is_admin: props.profile.is_admin && document.getElementById("admin").checked
         })
         .then((response) =>{
-            if(response.status == 200)
+            if(response.status === 200)
             {
               props.displayData("Thread", {})   
             }

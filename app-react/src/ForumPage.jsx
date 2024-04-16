@@ -26,7 +26,7 @@ function ForumPage (props) {
   }
 
   const addMessageToThread = (message)=>{
-    if(affichageCourant == "Thread"){
+    if(affichageCourant === "Thread"){
       setPageData([...pageData, message]);
     }
   }

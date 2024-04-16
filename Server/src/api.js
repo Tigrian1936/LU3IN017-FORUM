@@ -5,8 +5,7 @@ async function GetAllThreads(db)
     const query = {};
     const options = {projection: {_id : 0, original_poster_id : 1,  creation_date : 1, title : 1, is_admin : 1}};
     const result = await db.collection('Threads').find(query, options);
-    const arrayListThreads = await result.toArray();
-    return arrayListThreads;
+    return await result.toArray();
 }
 
 
@@ -14,8 +13,7 @@ async function GetThreadByTitle(db, title){
     const query = {title: title};
     const options = {projection: {_id : 0, original_poster_id : 1,  creation_date : 1, title : 1, is_admin : 1}};
     const result = await db.collection('Threads').findOne(query, options);
-    const arrayListThreads = await result.toArray();
-    return arrayListThreads;
+    return await result.toArray();
 }
 
 
@@ -23,16 +21,14 @@ async function GetThreadById(db, thread_id){
     const query = {_id: thread_id};
     const options = {projection: {_id : 0, original_poster_id : 1,  creation_date : 1, title : 1, is_admin : 1}};
     const result = await db.collection('Threads').findOne(query, options);
-    const arrayListThreads = await result.toArray();
-    return arrayListThreads;
+    return await result.toArray();
 }
 
 async function GetAllThreadsOfUser(db, user_id){
     const query = {original_poster_id : user_id};
     const options = {projection: {_id : 0, original_poster_id : 1,  creation_date : 1, title : 1, is_admin : 1}};
     const result = await db.collection('Threads').find(query, options);
-    const arrayListThreads = await result.toArray();
-    return arrayListThreads;
+    return await result.toArray();
 }
 
 // const express = require("express");

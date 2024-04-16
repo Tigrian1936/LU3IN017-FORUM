@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import logo from "./assets/react.svg"
 import axios from 'axios'
+import GetUrl from "./Url.jsx";
 function Login (props) {
     const [login, setLogin] = useState("");
     const [password, setPassword] = useState("");
@@ -10,12 +11,12 @@ function Login (props) {
 
 
     const handleSubmit = () => {
-        axios.post('http://127.0.0.1:5000', {
+        axios.post(GetUrl, {
             login: login, 
             password: password
         })
         .then((response) =>{
-            if(response.status == 200)
+            if(response.status === 200)
             {
                 props.logIn({id : 0, username:login, photo : response.data.logo, registerDate : new Date("1999-05-28").toLocaleDateString(), is_admin : false})
             }
