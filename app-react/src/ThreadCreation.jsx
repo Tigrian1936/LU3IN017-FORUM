@@ -3,7 +3,7 @@ import GetUrl from './Url';
 import axios from 'axios';
 function ThreadCreation(props){
   const createThread = ()=> {
-    axios.post(`${GetUrl()}/threads`, {
+    axios.post(`${GetUrl()}/threads/createThread`, {
             original_poster_id: props.profile.id,
             title: document.getElementById("title").value, 
             is_admin: props.profile.is_admin && document.getElementById("admin").checked

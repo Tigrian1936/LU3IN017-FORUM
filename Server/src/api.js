@@ -1,5 +1,3 @@
-const threads = require('./entities/threads.js');
-
 async function GetAllThreads(db)
 {
     const query = {};
@@ -7,7 +5,22 @@ async function GetAllThreads(db)
     const result = await db.collection('Threads').find(query, options);
     return await result.toArray();
 }
-
+async function CreateThread(db, original_poster_id, title, is_admin){
+    const query = {original_poster_id : original_poster_id, title : title, is_admin : is_admin}
+    const options = {projection: {_id : 1}};
+    const data = await db.collection('Threads').findOne(query, options);
+    console.log(data);
+    return new Promise((resolve, reject) => {
+        if(data != null){
+            reject("Thread already exists");
+        }
+        else {
+            const thread = {original_poster_id : original_poster_id, title : title, is_admin : is_admin, creation_date : Date.now()};
+            this.db.collection('Threads').insertOne(thread);
+            resolve(thread_id);
+        }
+    });
+}
 
 async function GetThreadByTitle(db, title){
     const query = {title: title};
@@ -31,6 +44,7 @@ async function GetAllThreadsOfUser(db, user_id){
     return await result.toArray();
 }
 
+export  {GetAllThreads, CreateThread, GetThreadByTitle, GetThreadById, GetAllThreadsOfUser};
 // const express = require("express");
 // const Users = require("./entities/users.js");
 
