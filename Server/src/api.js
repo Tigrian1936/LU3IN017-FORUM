@@ -16,7 +16,7 @@ async function CreateThread(db, original_poster_id, title, is_admin){
         }
         else {
             const thread = {original_poster_id : original_poster_id, title : title, is_admin : is_admin, creation_date : Date.now()};
-            this.db.collection('Threads').insertOne(thread);
+            const thread_id = db.collection('Threads').insertOne(thread);
             resolve(thread_id);
         }
     });
@@ -44,7 +44,7 @@ async function GetAllThreadsOfUser(db, user_id){
     return await result.toArray();
 }
 
-export  {GetAllThreads, CreateThread, GetThreadByTitle, GetThreadById, GetAllThreadsOfUser};
+module.exports = {GetAllThreads, CreateThread, GetThreadByTitle, GetThreadById, GetAllThreadsOfUser};
 // const express = require("express");
 // const Users = require("./entities/users.js");
 

@@ -5,6 +5,7 @@ const {MongoClient, Collection, MongoAzureError} = require('mongodb');
 const api = require('./api.js');
 app.use(express.json())
 app.use(cors());
+const dburl = "mongodb+srv://victorlocherer:blQqG6A9ZpIX4p3Q@clusterprojet.etclz03.mongodb.net/"
 const client = new MongoClient(dburl);
 
 client.connect()
@@ -24,7 +25,7 @@ app.post('/threads/createThread', async (req, res)=>{
       res.status(200).json(thread_id);
     })
     .catch(reason => {
-      res.status(400).json(reason);
+      res.status(400).json({message : reason.message});
     });
 });
 
