@@ -22,6 +22,29 @@ async function CreateThread(db, original_poster_id, title, is_admin){
     });
 }
 
+/*
+async function postMessage(db, original_poster_id, message , thread_id){
+
+    return new Promise((resolve, reject) => {
+        const msg = {original_poster_id : original_poster_id, message : message, thread_id : thread_id, creation_date : Date.now()};
+        const msg_id = db.collection('Messages').insertOne(msg);
+        resolve(msg_id);
+        }
+    });
+}
+
+//=========================================================================================================
+async function getProfile(db, user_id){
+    const querry = {original_poster_id : user_id}; // on cherche les msg du user
+    const options = {projection: {original_poster_id : 1 , message : 1 , creation_date : 1}}; // on garde que les msg fait par ce user avec son contenue et sa date de publication
+    const data = await db.collection('Messages').find(query, options); // vérifier la méthode de requete a la bdd (on doit avoir une liste de msg a la fin)
+    return new Promise((resolve, reject) => {
+        data // je suis pas sur mais on a que ca a renvoyer
+    });
+}
+
+*/
+
 async function GetThreadByTitle(db, title){
     const query = {title: title};
     const options = {projection: {_id : 0, original_poster_id : 1,  creation_date : 1, title : 1, is_admin : 1}};
