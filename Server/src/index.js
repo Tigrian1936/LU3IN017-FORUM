@@ -29,6 +29,29 @@ app.post('/threads/createThread', async (req, res)=>{
     });
 });
 
+
+app.get('/threads/sortByDate/:n', async (req, res)=>{
+    api.GetFirstNThreadsByDate(req.db, req.params.n).then((threads) => {
+      res.status(200).json(threads);
+    })
+    .catch(reason => {
+      res.status(400).json({message : reason.message});
+    });
+});
+
+app.get('/threads/newerThan/:date', async (req, res)=>{
+    api.GetThreadsNewerThan(req.db, req.params.date).then((threads) => {
+      res.status(200).json(threads);
+    })
+    .catch(reason => {
+      res.status(400).json({message : reason.message});
+    });
+});
+
+app.get('/threads/:thread_id', async (req, res)=>{
+  
+});
+
 app.post('/authentication/login', async (req, res)=>{
     const collection = req.db.collection('Users');
     const query = {username: req.body.login, password: req.body.password};
