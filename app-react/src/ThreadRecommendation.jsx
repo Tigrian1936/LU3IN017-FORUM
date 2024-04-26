@@ -1,24 +1,28 @@
 import React from 'react';
 import ThreadList from './ThreadList';
-
+import axios from 'axios';
+import GetUrl from './Url';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
-
-export const RecommandationQueryType = {
+const RecommandationQueryType = {
     MOSTRECENT: "By-most-recent",
 };
 
 function ThreadRecommendation(props) {
+    const [loadingData, setLoadingData] = useState(true);
     const [queryType, setQueryType] = useState(props.query)
     const [displayCount, setDisplayCount] = useState(50)
     const user = props.user;
     const setDisplay = props.setDisplay;
+    const setDisplayDataId = props.setDisplayDataId;
 
 
     const getRecommandationsFromDB = () => {
-        axios.get(`${GetUrl()}/threads/recommandation`, {queryType : queryType, count : displayCount}).then((response) => {
+        axios.get(`${GetUrl()}/threads`,{params: {queryType : queryType, count : displayCount}}).then((response) => {
             if (response.status === 200) {
-                return response.data;
+                setLoadingData(false);  
+                setRecommandations(response.data);
             }
             else {
                 console.log(response.message);
@@ -28,22 +32,18 @@ function ThreadRecommendation(props) {
         });
         return null;
     }
-
-    const setListForClient = () => {
-        const recommendations = getRecommandationsFromDB();
-        if (recommendations != null) {
-            setRecommandations(recommendations)
-        }
-        else {
-            console.log(`Error while  accessing messages of thread (id : ${props.id}). Check console for errors`)
-        }
-    }
-
+    useEffect(() => {
+        getRecommandationsFromDB();
+    }, [queryType, displayCount]);
+ 
     const [recommandations, setRecommandations] = useState(null);
+    if(loadingData){
+        return <div>Loading...</div>
+    }
     return (
         <div className="thread-recommandation-container">
-            <ThreadList threads={recommandations} setDisplay={setDisplay} />
+            <ThreadList threads={recommandations} setDisplay={setDisplay} setDisplayDataId = {setDisplayDataId}/>
         </div>);
 }
 
-export default {ThreadRecommendation, RecommandationQueryType};
+export {ThreadRecommendation, RecommandationQueryType};

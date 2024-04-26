@@ -14,7 +14,7 @@ function ThreadMessageForm(props){
   .then((response) =>{
       if(response.status === 200)
       {
-        props.OnSubmitSuccess();
+        props.setUpToDate(true);
       }
       else{
           console.log(response.message);

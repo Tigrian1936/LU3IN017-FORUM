@@ -1,14 +1,23 @@
 import React from 'react';
 import MessageList from './MessageList';
 import ThreadMessageForm from './ThreadMessageForm';
-
+import { useEffect } from 'react';
+import axios from 'axios';
+import GetUrl from './Url';
 import { useState } from 'react';
 function ThreadComponent(props){
 
+  const setDisplay = props.setDisplay;
+  const setDisplayDataId = props.setDisplayDataId;
+
+  const [loading, setLoading] = useState(true);
+  const [upToDate, setUpToDate] = useState(false);
+
   const getMessagesFromDB = () =>{
-    axios.get(`${GetUrl()}/threads/:${props.id}`).then((response) => {
+    axios.get(`${GetUrl()}/threads/${props.id}`).then((response) => {
       if (response.status === 200) {
-        return response.data;
+        setLoading(false);
+        setMessages(response.data.messages)
       }
       else {
         console.log(response.message);
@@ -19,21 +28,19 @@ function ThreadComponent(props){
     return null;
   }
 
-  const setMessagesForClient = () =>{
-    const messageList = getMessagesFromDB();
-    if(messageList != null){
-      setMessages(messageList)
-    }
-    else{
-      console.log(`Error while  accessing messages of thread (id : ${props.id}). Check console for errors`)
-    }
-  }
+  useEffect(() => {
+    getMessagesFromDB()
+    setUpToDate(true)}, [upToDate]);
+  
 
   const [messages, setMessages] = useState(null);
+  if(loading){
+    return (<div>Loading...</div>);
+  }
   return (
   <div className="thread">
-    <MessageList messages = {messages} displayData = {props.displayData}/>
-    <ThreadMessageForm id = {props.id} onSuccesfulAdd = {set}/>
+    <MessageList messages = {messages} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId}/>
+    <ThreadMessageForm id = {props.id} setUpToDate = {setUpToDate}/>
   </div>);
 }
 

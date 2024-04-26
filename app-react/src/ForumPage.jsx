@@ -1,10 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import ForumBody from './ForumBody';
 import photo from "./assets/react.svg"; 
 import AuthentificationPage from './AuthentificationPage';
 import ConnectedUserRedirection from './ConnectedUserRedirection';
-import { DisplayTypes } from './ForumBody';
+import { ThreadRecommendation, RecommandationQueryType } from './ThreadRecommendation';
+import { ForumBody, DisplayTypes } from './ForumBody';
 
 
 function ForumPage (props) {
@@ -20,8 +20,10 @@ function ForumPage (props) {
     setConnectedUser(null)
   }
 
-  const [currentBodyDisplay,setDisplay] = useState({displayType :DisplayTypes.MAINPAGE, displayDataId : null})
+  const [currentBodyDisplay,setDisplay] = useState(DisplayTypes.MAINPAGE);
+  const [displayDataId, setDisplayDataId] = useState(null);
 
+  const createThreadDisplay = (evt)=>{setDisplay(DisplayTypes.CREATE_THREAD)}
 
   
 
@@ -36,15 +38,15 @@ function ForumPage (props) {
             
           </div>
           <div id="connect">
-              <ConnectedUserRedirection logOut = {logOut} displayData = {displayData} user = {user}/>
+              <ConnectedUserRedirection logOut = {logOut} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId} user = {user}/>
           </div>
          </header>
          <div>
           <div className="threads-recommandation">  
-            <ThreadRecommendation user={user} query={RecommandationQueryType.MOSTRECENT} setDisplay = {setDisplay}/>
-            <button onClick={switchToCreateThread}>Create Thread</button>
+            <ThreadRecommendation user={user} query={RecommandationQueryType.MOSTRECENT} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId}/>
+            <button onClick={createThreadDisplay}>Create Thread</button>
           </div>
-          <ForumBody user = {user} display = {currentBodyDisplay} setDisplay = {bodyDisplayOverride}/>
+          <ForumBody user = {user} display = {currentBodyDisplay} setDisplay = {setDisplay} displayDataId = {displayDataId} setDisplayDataId = {setDisplayDataId}/>
         </div>
       </div>);
   }

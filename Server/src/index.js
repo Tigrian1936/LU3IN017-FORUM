@@ -8,7 +8,8 @@ app.use(cors());
 const dburl = "mongodb+srv://victorlocherer:blQqG6A9ZpIX4p3Q@clusterprojet.etclz03.mongodb.net/"
 const client = new MongoClient(dburl);
 
-client.connect()
+client
+.connect()
     .then(() => {
       console.log('Connected to MongoDB');
     })
@@ -20,28 +21,10 @@ app.use((req, res, next) => {
   req.db = client.db('DatabaseProjet'); // Attach the database to the request
   next();
 });
-app.post('/threads/createThread', async (req, res)=>{
+app.post('/threads', async (req, res)=>{
     api.CreateThread(req.db, req.body.original_poster_id, req.body.title, req.body.is_admin).then((thread_id) => {
-      res.status(200).json(thread_id);
-    })
-    .catch(reason => {
-      res.status(400).json({message : reason.message});
-    });
-});
-
-
-app.get('/threads/sortByDate/:n', async (req, res)=>{
-    api.GetFirstNThreadsByDate(req.db, req.params.n).then((threads) => {
-      res.status(200).json(threads);
-    })
-    .catch(reason => {
-      res.status(400).json({message : reason.message});
-    });
-});
-
-app.get('/threads/newerThan/:date', async (req, res)=>{
-    api.GetThreadsNewerThan(req.db, req.params.date).then((threads) => {
-      res.status(200).json(threads);
+      api.CreateServerMessage(req.db, thread_id.insertedId, req.body.original_poster_id, req.body.title, req.body.is_admin)
+      res.status(200).json({thread_id : thread_id.insertedId});
     })
     .catch(reason => {
       res.status(400).json({message : reason.message});
@@ -49,13 +32,28 @@ app.get('/threads/newerThan/:date', async (req, res)=>{
 });
 
 app.get('/threads/:thread_id', async (req, res)=>{
-  
+  api.GetThreadMessages(req.db, req.params.thread_id).then((messages)=>{
+    console.log(messages);
+    res.status(200).json(messages);
+  }).catch(reason =>{
+    res.status(400).json({message : reason.message});
+  })
+});
+
+
+
+app.get('/threads', async (req, res)=>{
+  api.GetThreadRecommendation(req.db, req.query.queryType, req.query.count).then((threads)=>{
+    res.status(200).json(threads);
+  }).catch(reason =>{
+    res.status(400).json({message : reason.message});
+  })
 });
 
 app.post('/authentication/login', async (req, res)=>{
     const collection = req.db.collection('Users');
     const query = {username: req.body.login, password: req.body.password};
-    const options = {projection: {_id: 0, username: 1, password: 1, logo : 1}};
+    const options = {projection: {_id: 1, username: 1, password: 1, logo : 1}};
     const result = await collection.findOne(query, options);
     if(result != null){
       res.status(200).json(result);

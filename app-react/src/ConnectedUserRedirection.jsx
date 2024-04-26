@@ -3,12 +3,11 @@ import ClickableUserProfile from './ClickableUserProfile';
 import Logout from './Logout';
 
 function ConnectedUserRedirection (props) {
-    const switchToProfile =(profile) => {
-        props.displayData("Profile", {profile : profile, messageList : [{profile : profile, text : "MON PREMIER MESSAGE", date : "le 12 23 21"}]});
-    }
+    const setDisplay = props.setDisplay;
+    const setDisplayDataId = props.setDisplayDataId;
     return (
         <div>
-            <ClickableUserProfile profile = {props.user} switchToProfile ={switchToProfile}/>
+            <ClickableUserProfile user = {props.user} setDisplay ={setDisplay} setDisplayDataId = {setDisplayDataId}/>
             <Logout logOut = {props.logOut}/>
         </div>
     );

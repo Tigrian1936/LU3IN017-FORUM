@@ -1,17 +1,20 @@
 import React from 'react';
 import GetUrl from './Url';
 import axios from 'axios';
+import { DisplayTypes } from './ForumBody';
 function ThreadCreation(props){
   const createThread = ()=> {
-    axios.post(`${GetUrl()}/threads/createThread`, {
-            original_poster_id: props.profile.id,
+    axios.post(`${GetUrl()}/threads`, {
+            original_poster_id: props.user.id,
             title: document.getElementById("title").value, 
-            is_admin: props.profile.is_admin && document.getElementById("admin").checked
+            is_admin: props.user.is_admin && document.getElementById("admin").checked
         })
         .then((response) =>{
             if(response.status === 200)
             {
-              props.displayData("Thread", {})   
+              props.setDisplay(DisplayTypes.THREAD)   
+              console.log(response.data.thread_id);
+              props.setDisplayDataId(response.data.thread_id)
             }
             else{
                 console.log(response.message);
@@ -21,7 +24,7 @@ function ThreadCreation(props){
             console.error(err);
         });
   }
-  if(props.profile.is_admin){
+  if(props.user.is_admin){
     return (<div className="thread-creation-fields">
     <label>Titre</label><input id="title"/>
     <toggle>Admin</toggle>

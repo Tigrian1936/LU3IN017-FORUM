@@ -1,16 +1,20 @@
 import React from 'react';
 import MessageComponent from './MessageComponent';
 import { useState } from 'react';
+import { DisplayTypes } from './ForumBody';
 
 function MessageList (props) {
 
+  const setDisplay = props.setDisplay;
+  const setDisplayDataId = props.setDisplayDataId;
   const SwitchToProfile = (profile) => {
-    props.displayData("Profile", {profile : profile, messageList : [{profile : profile, text : "MON PREMIER MESSAGE", date : "le 12 23 21"}]});
+    setDisplay(DisplayTypes.PROFILE);
+    setDisplayDataId(profile.user_id);
   }
 
   return (<div className="message-list">
     {props.messages.map((message, index) => (
-      <MessageComponent key = {index} profile = {message.profile} text = {message.text} date = {message.date} index = {index} switchToProfile = {SwitchToProfile}/>
+      <MessageComponent key = {index} user = {message.user} text = {message.text} date = {message.date} index = {index} switchToProfile = {SwitchToProfile}/>
     ))}
   </div>);
 }

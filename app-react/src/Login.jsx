@@ -18,7 +18,7 @@ function Login (props) {
         .then((response) =>{
             if(response.status === 200)
             {
-                props.logIn({id : 0, username:login, photo : response.data.logo, registerDate : new Date("1999-05-28").toLocaleDateString(), is_admin : false})
+                props.logIn({id : response.data._id, username:login, photo : response.data.photo, registerDate : response.data.registerDate, is_admin : false})
             }
             else{
                 console.log(response.message);
