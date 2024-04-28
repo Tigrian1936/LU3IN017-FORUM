@@ -10,7 +10,6 @@ function ThreadList (props) {
 
   const switchToThread = (threadId) => {
     setDisplay(DisplayTypes.THREAD);
-    console.log(threadId);
     setDisplayDataId(threadId);
   }
   return (<div className="message-list">

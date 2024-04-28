@@ -1,4 +1,10 @@
 const { ObjectId } = require('mongodb');
+
+function convertToObjectId(id){
+    if(id instanceof ObjectId){return id;}
+    return new ObjectId(id);
+}
+
 async function GetAllThreads(db)
 {
     const query = {};
@@ -9,8 +15,8 @@ async function GetAllThreads(db)
 
 async function GetThreadMessages(db, thread_id){
     return new Promise((resolve, reject) => {
-        const query = { thread_id: ObjectId(thread_id) };
-        const options = { projection: { _id: 1, text: 1, user_id: 1, publish_date: 1 } };
+        const query = { thread_id : convertToObjectId(thread_id)};
+        const options = { projection: { _id: 1, thread_id : 1, text: 1, user_id: 1, publish_date: 1, is_admin : 1} };
         const messages = db.collection('Messages').find(query, options).toArray();
         if(messages != null){
             resolve(messages);
@@ -43,12 +49,53 @@ async function GetFirstNThreadsByDate(db, n)
     });
 }
 
+async function CreateMessage(db, thread_id, user_id, text){
+    return new Promise((resolve, reject) => {
+        const query = {_id  : convertToObjectId(user_id)};
+        const options = {projection: {_id : 0, username : 1}};
+        const user = db.collection('Users').findOne(query, options);
+        const message = {thread_id : convertToObjectId(thread_id), user_id : convertToObjectId(user_id), text : text, publish_date : Date.now()};
+        db.collection('Messages').insertOne(message).then(() => {
+            resolve();
+        }).catch((err) => {
+            reject(err);
+        });
+    });
+
+}
+
+async function GetUser(db, user_id){
+    return new Promise((resolve, reject) => {
+        const query = {_id  : convertToObjectId(user_id)};
+        const options = {projection: {_id : 1, username : 1, logo : 1}};
+        const user = db.collection('Users').findOne(query, options);
+        if(user != null){
+            resolve(user);
+        }
+        else {
+            reject("User not found");
+        }
+    });
+}
+async function GetUserMessages(db, user_id){
+    return new Promise((resolve, reject) => {
+        const query2 = {user_id : convertToObjectId(user_id)};
+        const options2 = {projection: {_id : 1, thread_id : 1, user_id : 1, text : 1, publish_date : 1, is_admin : 1}};
+        const messages = db.collection('Messages').find(query2, options2).toArray();
+        if(messages != null){
+            resolve(messages);
+        }
+        else {
+            reject("User not found");
+        }
+    });
+}
 async function CreateServerMessage(db, thread_id, user_id, title, is_admin){
     return new Promise((resolve, reject) => {
         const query = {_id  : user_id};
         const options = {projection: {_id : 0, username : 1}};
         const user = db.collection('Users').findOne(query, options);
-        const text = `Thread ${title} created by ${user.username} (${Date.now()})`;
+        const text = `Thread ${title} created by ${user.username} (${new Date(Date.now()).toLocaleDateString()})`;
         const message = {thread_id : thread_id, user_id : 0, text : text, publish_date : Date.now(), is_admin : is_admin};
         db.collection('Messages').insertOne(message).then(() => {
             resolve();
@@ -106,4 +153,4 @@ async function GetThreadRecommendation(db, queryType, count){
     return null;
 }
 
-module.exports = {GetAllThreads, GetThreadMessages, GetThreadsNewerThan, GetFirstNThreadsByDate, GetThreadRecommendation, CreateThread, GetThreadByTitle, GetThreadById, CreateServerMessage, GetAllThreadsOfUser};
+module.exports = {GetAllThreads, GetUserMessages, GetUser, GetThreadMessages, CreateMessage, GetThreadsNewerThan, GetFirstNThreadsByDate, GetThreadRecommendation, CreateThread, GetThreadByTitle, GetThreadById, CreateServerMessage, GetAllThreadsOfUser};

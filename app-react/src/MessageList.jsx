@@ -9,12 +9,12 @@ function MessageList (props) {
   const setDisplayDataId = props.setDisplayDataId;
   const SwitchToProfile = (profile) => {
     setDisplay(DisplayTypes.PROFILE);
-    setDisplayDataId(profile.user_id);
+    setDisplayDataId(profile.id);
   }
 
   return (<div className="message-list">
     {props.messages.map((message, index) => (
-      <MessageComponent key = {index} user = {message.user} text = {message.text} date = {message.date} index = {index} switchToProfile = {SwitchToProfile}/>
+      <MessageComponent key = {index} user_id = {message.user_id} text = {message.text} date = {message.publish_date} is_admin = {message.is_admin} index = {index} switchToProfile = {SwitchToProfile}/>
     ))}
   </div>);
 }

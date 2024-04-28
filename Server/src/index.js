@@ -33,13 +33,35 @@ app.post('/threads', async (req, res)=>{
 
 app.get('/threads/:thread_id', async (req, res)=>{
   api.GetThreadMessages(req.db, req.params.thread_id).then((messages)=>{
-    console.log(messages);
-    res.status(200).json(messages);
+    res.status(200).json({messages : messages});
   }).catch(reason =>{
     res.status(400).json({message : reason.message});
   })
 });
 
+app.post('/threads/:thread_id', async (req, res)=>{
+  api.CreateMessage(req.db, req.params.thread_id, req.body.user_id, req.body.text).then(() => {
+    res.status(200).json({message : "Message created"});
+  }).catch(reason => {
+    res.status(400).json({message : reason.message});
+  });
+});
+
+app.get('/users/:user_id', async (req, res)=>{
+  if(req.params.user_id === "0"){
+    res.status(200).json({user : {username : "Server", logo : ""}, messages : []});
+    return;
+  }
+  api.GetUser(req.db, req.params.user_id).then((user)=>{
+    api.GetUserMessages(req.db, req.params.user_id).then((messages)=>{
+      res.status(200).json({user: user, messages : messages});
+    }).catch(reason =>{
+      res.status(400).json({message : reason.message});
+    })
+  }).catch(reason =>{
+    res.status(400).json({message : reason.message});
+  })
+});
 
 
 app.get('/threads', async (req, res)=>{
