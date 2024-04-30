@@ -5,7 +5,7 @@ import GetUrl from './Url';
 import { useState } from 'react';
 import { useEffect } from 'react';
 
-const RecommendationQueryType = {
+const RecommandationQueryType = {
     MOSTRECENT: "By-most-recent",
 };
 
@@ -25,7 +25,7 @@ function ThreadRecommendation(props) {
     const setDisplayDataId = props.setDisplayDataId;
 
 
-    const getRecommendationsFromDB = () => {
+    const getRecommandationsFromDB = () => {
         axios.get(`${GetUrl()}/threads`,{params: {queryType : queryType, count : displayCount}}).then((response) => {
             if (response.status === 200) {
                 setLoadingData(LoadingStates.LOADED);  
@@ -42,7 +42,7 @@ function ThreadRecommendation(props) {
     }
     useEffect(() => {
         setLoadingData(LoadingStates.LOADING);
-        getRecommendationsFromDB();
+        getRecommandationsFromDB();
     }, [queryType, displayCount]);
  
     const [recommandations, setRecommandations] = useState(null);
@@ -55,4 +55,4 @@ function ThreadRecommendation(props) {
         </div>);
 }
 
-export {ThreadRecommendation, RecommendationQueryType};
+export {ThreadRecommendation, RecommandationQueryType};
