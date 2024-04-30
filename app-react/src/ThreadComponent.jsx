@@ -25,6 +25,7 @@ function ThreadComponent(props){
       if (response.status === 200) {
         setLoading(LoadingStates.LOADED);
         setMessages(response.data.messages)
+        console.log(response.data.messages);
       }
       else {
         console.log(response.message);
