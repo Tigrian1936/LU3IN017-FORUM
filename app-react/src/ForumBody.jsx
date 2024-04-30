@@ -4,7 +4,7 @@ import { useState } from 'react';
 import UserProfile from './UserProfile';
 import ThreadCreation from './ThreadCreation';
 import axios from 'axios';
-import {ThreadRecommendation, RecommandationQueryType } from './ThreadRecommendation';
+import {ThreadRecommendation, RecommendationQueryType } from './ThreadRecommendation';
 
 const DisplayTypes = {
   MAINPAGE: "MainPage",
@@ -33,7 +33,7 @@ function ForumBody (props) {
         <ThreadCreation user = {user} id = {data_id} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId}/>
       </div>);
     case DisplayTypes.MAINPAGE: default:
-        <ThreadRecommendation user = {user} query = {RecommandationQueryType.MOSTRECENT} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId}/>
+        <ThreadRecommendation user = {user} query = {RecommendationQueryType.MOSTRECENT} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId}/>
       break;
   }
 }

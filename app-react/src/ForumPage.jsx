@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import photo from "./assets/react.svg"; 
 import AuthentificationPage from './AuthentificationPage';
 import ConnectedUserRedirection from './ConnectedUserRedirection';
-import { ThreadRecommendation, RecommandationQueryType } from './ThreadRecommendation';
+import { ThreadRecommendation, RecommendationQueryType } from './ThreadRecommendation';
 import { ForumBody, DisplayTypes } from './ForumBody';
 
 
@@ -43,7 +43,7 @@ function ForumPage (props) {
          </header>
          <div>
           <div className="threads-recommandation">  
-            <ThreadRecommendation user={user} query={RecommandationQueryType.MOSTRECENT} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId}/>
+            <ThreadRecommendation user={user} query={RecommendationQueryType.MOSTRECENT} setDisplay = {setDisplay} setDisplayDataId = {setDisplayDataId}/>
             <button onClick={createThreadDisplay}>Create Thread</button>
           </div>
           <ForumBody user = {user} display = {currentBodyDisplay} setDisplay = {setDisplay} displayDataId = {displayDataId} setDisplayDataId = {setDisplayDataId}/>
