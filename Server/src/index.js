@@ -29,26 +29,6 @@ app.post('/threads/createThread', async (req, res)=>{
     });
 });
 
-/*
-app.post('/je sais pas quoi mettre', async (req, res)=>{
-    api.postMessage(req.db, req.body.original_poster_id, req.body.message, req.body.thread_id).then((msg_id) => {
-      res.status(200).json(thread_id);
-    })
-    .catch(reason => {
-      res.status(400).json({message : reason.message});
-    });
-});
-
-//=========================================================================================================
-app.get('/je sais pas quoi mettre', async (req, res)=>{
-    api.getProfile(req.db, req.body.user_id) => {
-// je sais pas comment le faire la du coup 
-    })
-    .catch(reason => {
-      res.status(400).json({message : reason.message});
-    });
-});
-*/
 
 app.post('/authentication/login', async (req, res)=>{
     const collection = req.db.collection('Users');

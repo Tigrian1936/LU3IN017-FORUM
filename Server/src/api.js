@@ -5,6 +5,29 @@ async function GetAllThreads(db)
     const result = await db.collection('Threads').find(query, options);
     return await result.toArray();
 }
+
+async function GetThreadMessages(db, thread_id){
+    const queryMessage = {thread_id :{$eq : thread_id}};
+    const optionsMessage = {projection: {_id : 0, text:1, user_id : 1, publish_date : 1}};
+    const messages = await db.collection('Messages').find(query, options);
+    return await result.toArray();
+}
+async function GetThreadsNewerThan(db, date)
+{
+    const query = {creation_date : {$gt : date}};
+    const options = {projection: {_id : 0, original_poster_id : 1,  creation_date : 1, title : 1, is_admin : 1}};
+    const result = await db.collection('Threads').find(query, options);
+    return await result.toArray();
+}
+
+async function GetFirstNThreadsByDate(db, n)
+{
+    const query = {};
+    const options = {projection: {_id : 0, original_poster_id : 1,  creation_date : 1, title : 1, is_admin : 1}, sort : {creation_date : 1}, limit : n};
+    const result = await db.collection('Threads').find(query, options);
+    return await result.toArray();
+}
+
 async function CreateThread(db, original_poster_id, title, is_admin){
     const query = {original_poster_id : original_poster_id, title : title, is_admin : is_admin}
     const options = {projection: {_id : 1}};
@@ -67,7 +90,7 @@ async function GetAllThreadsOfUser(db, user_id){
     return await result.toArray();
 }
 
-module.exports = {GetAllThreads, CreateThread, GetThreadByTitle, GetThreadById, GetAllThreadsOfUser};
+module.exports = {GetAllThreads, GetThreadsNewerThan, GetFirstNThreadsByDate, CreateThread, GetThreadByTitle, GetThreadById, GetAllThreadsOfUser};
 // const express = require("express");
 // const Users = require("./entities/users.js");
 

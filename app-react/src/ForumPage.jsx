@@ -2,44 +2,28 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import ForumBody from './ForumBody';
 import photo from "./assets/react.svg"; 
-import ClickableUserProfile from './ClickableUserProfile';
-import Logout from './Logout';
 import AuthentificationPage from './AuthentificationPage';
 import ConnectedUserRedirection from './ConnectedUserRedirection';
-import ThreadList from './ThreadList'
+import { DisplayTypes } from './ForumBody';
+
+
 function ForumPage (props) {
-  const [affichageCourant,setAffichageCourant] = useState(null)
   
   //Current Connected Profile
   const [user, setConnectedUser] = useState(null)
 
-  //Affichage profile page
-  const [pageData, setPageData] = useState(null) 
-
   const logIn = (profile)=>{
     setConnectedUser(profile)
-  }
-
-  const displayData = (affichage, data)=>{
-    setAffichageCourant(affichage);
-    setPageData(data);
-  }
-
-  const addMessageToThread = (message)=>{
-    if(affichageCourant === "Thread"){
-      setPageData([...pageData, message]);
-    }
-  }
-
-  const switchToCreateThread = () =>{
-    setAffichageCourant("CreateThread")
-    setPageData(null)
   }
 
   const logOut = (evt)=>{
     setConnectedUser(null)
   }
 
+  const [currentBodyDisplay,setDisplay] = useState({displayType :DisplayTypes.MAINPAGE, displayDataId : null})
+
+
+  
 
   if(user != null){
     return (
@@ -56,10 +40,11 @@ function ForumPage (props) {
           </div>
          </header>
          <div>
-          <div className="threads-recommandation">
+          <div className="threads-recommandation">  
+            <ThreadRecommendation user={user} query={RecommandationQueryType.MOSTRECENT} setDisplay = {setDisplay}/>
             <button onClick={switchToCreateThread}>Create Thread</button>
           </div>
-          <ForumBody affichageCourant = {affichageCourant} addMessageToThread = {addMessageToThread} pageData = {pageData} displayData = {displayData} user = {user}/>
+          <ForumBody user = {user} display = {currentBodyDisplay} setDisplay = {bodyDisplayOverride}/>
         </div>
       </div>);
   }

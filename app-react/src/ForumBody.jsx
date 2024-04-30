@@ -3,24 +3,39 @@ import ThreadComponent from './ThreadComponent';
 import { useState } from 'react';
 import UserProfile from './UserProfile';
 import ThreadCreation from './ThreadCreation';
+import axios from 'axios';
+import ThreadRecommendation, { RecommandationQueryType } from './ThreadRecommendation';
 
+export const DisplayTypes = {
+  MAINPAGE: "MainPage",
+  THREAD: "Thread",
+  PROFILE: "Profile",
+  CREATE_THREAD: "CreateThread",
+};
 function ForumBody (props) {
-  if(props.affichageCourant === "Thread"){
-    return (<div className="forum-Body">
-    <ThreadComponent messages = {props.pageData} addMessage = {props.addMessageToThread} displayData = {props.displayData}/>
-  </div>);
-  }
-  if(props.affichageCourant === "Profile"){
-      return (<div className="forum-Body">
-      <UserProfile profile = {props.pageData.profile} messageList = {props.pageData.messageList} displayData = {props.displayData}/>
-    </div>);
-  }
-  if(props.affichageCourant === "CreateThread"){
-      return(<div>
-        <ThreadCreation profile = {props.user} displayData = {props.displayData}/>
-      </div>)
+  const user = props.user;
+  const data_id = props.display.displayData;
+  const display = props.display.currentDisplay;
+  const setDisplay = props.setDisplay;
+
+  switch(display){
+    case DisplayTypes.THREAD: 
+      return (<div className="thread-display-page">
+        <ThreadComponent user = {user} id={data_id} setDisplay = {setDisplay}/>
+      </div>);
+    case DisplayTypes.PROFILE:
+      return (<div className="profile-display-page">
+        <UserProfile user = {user} id = {data_id} setDisplay = {setDisplay}/>
+      </div>);
+    case DisplayTypes.CREATE_THREAD:
+      return(<div className = "thread-creation-page">
+        <ThreadCreation user = {user} id = {data_id} setDisplay = {setDisplay}/>
+      </div>);
+    case DisplayTypes.MAINPAGE: default:
+        <ThreadRecommendation user = {user} query = {RecommandationQueryType.MOSTRECENT} setDisplay = {setDisplay}/>
+      break;
   }
 }
 
 
-export default ForumBody;
+export default {ForumBody, DisplayTypes};
