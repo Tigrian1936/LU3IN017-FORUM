@@ -1,14 +1,19 @@
 import { useState } from 'react'
 import ClickableUserProfile from './ClickableUserProfile';
 import Logout from './Logout';
+import { DisplayTypes } from './ForumBody';
 
 function ConnectedUserRedirection (props) {
-    const switchToProfile =(profile) => {
-        props.displayData("Profile", {profile : profile, messageList : [{profile : profile, text : "MON PREMIER MESSAGE", date : "le 12 23 21"}]});
-    }
+
+    const SwitchToProfile = (profile) => {
+        setDisplay(DisplayTypes.PROFILE);
+        setDisplayDataId(profile.id);
+      }
+    const setDisplay = props.setDisplay;
+    const setDisplayDataId = props.setDisplayDataId;
     return (
         <div>
-            <ClickableUserProfile profile = {props.user} switchToProfile ={switchToProfile}/>
+            <ClickableUserProfile user = {props.user} switchToProfile  = {SwitchToProfile}/>
             <Logout logOut = {props.logOut}/>
         </div>
     );

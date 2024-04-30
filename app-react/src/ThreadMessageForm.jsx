@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
-
+import axios from 'axios';
+import GetUrl from './Url';
 import photo from "./assets/react.svg"; 
 
 function ThreadMessageForm(props){
@@ -8,13 +9,14 @@ function ThreadMessageForm(props){
 
   const handeSubmitNewMessage = event =>{
     event.preventDefault();
-    axios.post(`${GetUrl()}/threads/:${props.id}/add`, {
-      message: message
+    axios.post(`${GetUrl()}/threads/${props.id}`, {
+      user_id: props.user.id,
+      text: message
   })
   .then((response) =>{
       if(response.status === 200)
       {
-        props.OnSubmitSuccess();
+        props.setUpToDate(true);
       }
       else{
           console.log(response.message);

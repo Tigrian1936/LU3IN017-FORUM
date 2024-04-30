@@ -1,14 +1,10 @@
 import React from 'react';
 
 function ClickableUserProfile (props){
-  const OnClickProfile = event=>{
-    props.switchToProfile(props.profile)
-  }
 
   return (<div className="messageProfile">
     <div className="message-Profile-details">
-        <button className="user-id" onClick={OnClickProfile}>{props.profile.username} </button> 
-        <img src={props.profile.photo}/>
+        <button className="user-id" onClick={evt => props.switchToProfile(props.user)}>{props.user.username} </button> 
     </div>  
   </div>);
 }
