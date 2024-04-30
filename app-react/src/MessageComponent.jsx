@@ -12,9 +12,10 @@ function MessageComponent (props){
   const [user, setUser] = useState(null);
   const [dataLoadingState, setLoadingState] = useState(LoadingStates.IDLE);
 
+  const id = props.user_id;
   const getUserInfosFromDB = () =>{
     console.log(props.user_id);
-    axios.get(`${GetUrl()}/users/${props.user_id}`)
+    axios.get(`${GetUrl()}/users/${id}`)
     .then((response) => {
       setLoadingState(LoadingStates.LOADED);
       setUser({id : response.data._id, username:response.data.username, logo : response.data.logo, registerDate : response.data.registerDate, is_admin : false})
