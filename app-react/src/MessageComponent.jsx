@@ -18,7 +18,8 @@ function MessageComponent (props){
     axios.get(`${GetUrl()}/users/${id}`)
     .then((response) => {
       setLoadingState(LoadingStates.LOADED);
-      setUser({id : response.data._id, username:response.data.username, logo : response.data.logo, registerDate : response.data.registerDate, is_admin : false})
+      const user = response.data.user;
+      setUser({username: user.username, id: user._id})  
     })
     .catch((error) => {
       setLoadingState(LoadingStates.IDLE);
